@@ -1,26 +1,33 @@
-import React from "react";
+import React, {useState} from "react";
 
-function SearchBar() {
+function SearchBar({handleSort}) {
+  const [isAlpha, setIsAlpha] = useState(true)
+
+  function handleChange(e){
+    setIsAlpha(!isAlpha)
+    handleSort(e.target.value)
+  }
+
   return (
-    <div>
+    <div className="search-bar">
       <strong>Sort by:</strong>
       <label>
         <input
           type="radio"
-          value="Alphabetically"
+          value="alphabetically"
           name="sort"
-          checked={null}
-          onChange={null}
+          checked={isAlpha ? true : false}
+          onChange={handleChange}
         />
         Alphabetically
       </label>
       <label>
         <input
           type="radio"
-          value="Price"
+          value="price"
           name="sort"
-          checked={null}
-          onChange={null}
+          checked={isAlpha ? false : true}
+          onChange={handleChange}
         />
         Price
       </label>
