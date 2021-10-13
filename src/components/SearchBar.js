@@ -1,7 +1,8 @@
 import React, {useState} from "react";
 
-function SearchBar({handleSort}) {
+function SearchBar({handleSort, handleFilter}) {
   const [isAlpha, setIsAlpha] = useState(true)
+  const [filter, setFilter] = ('Tech')
 
   function handleChange(e){
     setIsAlpha(!isAlpha)
@@ -34,7 +35,7 @@ function SearchBar({handleSort}) {
       <br />
       <label>
         <strong>Filter:</strong>
-        <select onChange={null}>
+        <select onChange={((e) => handleFilter(e.target.value.toLowerCase()))}>
           <option value="Tech">Tech</option>
           <option value="Sportswear">Sportswear</option>
           <option value="Finance">Finance</option>

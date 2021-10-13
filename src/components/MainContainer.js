@@ -4,6 +4,7 @@ import PortfolioContainer from "./PortfolioContainer";
 import SearchBar from "./SearchBar";
 
 function MainContainer() {
+  const [fullStocks, setFullStocks] = useState([])
   const [stocks, setStocks] = useState([])
   const [myStocks, setMyStocks] = useState([])
   const [viewCards, setViewCards] = useState({
@@ -19,6 +20,7 @@ function MainContainer() {
         return {...stock, myStock:false}
       })
       setStocks(updateStocksData)
+      setFullStocks(updateStocksData)
     })
   }, [])
 
@@ -46,14 +48,13 @@ function MainContainer() {
   }
 
   function handleSort(sortBy){
-    console.log(sortBy)
-    let sortedStocks;
+    let sortedStocks = [...stocks]
     if(sortBy === 'price'){
-      sortedStocks = stocks.sort(function (a, b) {
+      sortedStocks.sort(function (a, b) {
         return b.price - a.price;
       })
     }else{
-      sortedStocks = stocks.sort(function(a, b) {
+      sortedStocks.sort(function(a, b) {
         var nameA = a.name.toUpperCase(); // ignore upper and lowercase
         var nameB = b.name.toUpperCase(); // ignore upper and lowercase
         if (nameA < nameB) {
@@ -62,23 +63,25 @@ function MainContainer() {
         if (nameA > nameB) {
           return 1;
         }
-      
-        // names must be equal
         return 0;
       });
     }
-    console.log('sorted: ', sortedStocks)
     setStocks(sortedStocks)
+  }
+
+  function handleFilter(filterType){
+    const filteredStocks = fullStocks.filter(stock => stock.type.toLowerCase() === filterType)
+    setStocks(filteredStocks)
   }
   
 
   return (
     <div className="main-container">
-      <SearchBar handleSort={handleSort} />
+      <SearchBar handleSort={handleSort} handleFilter={handleFilter} />
       <div className="all-stocks">
         <div className="stock-container">
         <h2 id='stocks' onClick={(e)=>handleView(e)}>Stocks</h2>
-          {viewCards.stocks ? <StockContainer stocks={stocks} moveStock={moveStock} /> : null}
+          {viewCards.stocks ? <StockContainer stocks={stocks} moveStock={moveStock}  /> : null}
         </div>
         <div className="portfolio-container">
         <h2 id='portfolio' onClick={(e)=>handleView(e)}>My Portfolio</h2>
